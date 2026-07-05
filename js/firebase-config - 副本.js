@@ -17,26 +17,24 @@
 // - 生产环境建议启用 Firebase App Check 或匿名认证，防止滥用。
 // ============================================
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDKSMUvuIHYSf6cE5Vg2PhHw2nn8q8AFyk",
-    authDomain: "tu-shan.firebaseapp.com",
-    projectId: "tu-shan",
-    storageBucket: "tu-shan.firebasestorage.app",
-    messagingSenderId: "255034914727",
-    appId: "1:255034914727:web:4154a740d9299f0b606882",
-    measurementId: "G-8S4434QC9F"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDKSMUvuiHYSf6cE5Vg2PhHw2nn8q8AFyk",
+  authDomain: "tu-shan.firebaseapp.com",
+  projectId: "tu-shan",
+  storageBucket: "tu-shan.firebasestorage.app",
+  messagingSenderId: "255034914727",
+  appId: "1:255034914727:web:4154a740d9299f0b606882",
+  measurementId: "G-8S4434QC9F"
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+export const isConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== 'YOUR_API_KEY';
+export let app = null;
+export let db = null;
+
+if (isConfigured) {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+}
