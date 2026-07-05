@@ -3,349 +3,962 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>九尾天狐星团</title>
+<title>狐美子</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  overflow: hidden;
-  font-family: "Microsoft YaHei", sans-serif;
-  background: #000;
-  color: #ffd27a;
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: #000; color: #ffd27a;
 }
-#bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-#foxCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-.ui {
-  position: fixed;
-  z-index: 10;
-  width: 100%;
-  pointer-events: none;
-}
+#canvas-container { position: fixed; inset: 0; z-index: 0; }
+.ui { position: fixed; z-index: 10; inset: 0; pointer-events: none; }
 .header {
-  top: 0;
-  left: 0;
-  padding: 20px;
-  text-align: center;
+  position: absolute; top: 0; left: 0; width: 100%; padding: 28px;
+  text-align: center; animation: fadeInDown 2s ease-out;
 }
 .header h1 {
-  font-size: 36px;
-  text-shadow: 0 0 20px #ffcc66;
+  font-size: 42px; font-weight: 900; letter-spacing: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff6d0 30%, #ffcc66 60%, #ff8c42 90%, #ff69b4 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(255, 180, 90, 0.65)) drop-shadow(0 0 60px rgba(255, 105, 180, 0.3));
 }
 .header p {
-  font-size: 14px;
-  opacity: 0.8;
-  margin-top: 6px;
+  font-size: 15px; margin-top: 10px; color: rgba(210, 235, 255, 0.9);
+  text-shadow: 0 0 18px rgba(120, 190, 255, 0.5);
+  letter-spacing: 3px;
 }
 .controls {
-  bottom: 0;
-  left: 0;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  position: absolute; bottom: 0; left: 0; width: 100%; padding: 28px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
 }
 .input-row {
-  display: flex;
-  gap: 10px;
-  pointer-events: auto;
+  display: flex; gap: 14px; pointer-events: auto;
+  padding: 10px; border-radius: 18px;
+  background: rgba(10, 14, 30, 0.35);
+  border: 1px solid rgba(255, 210, 130, 0.25);
+  box-shadow: 0 0 40px rgba(255, 170, 90, 0.12);
+  backdrop-filter: blur(14px);
 }
 input[type="text"] {
-  padding: 10px 16px;
-  border: 1px solid rgba(255, 204, 102, 0.5);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #ffd27a;
-  font-size: 15px;
-  outline: none;
-  width: 200px;
+  padding: 14px 22px; border: 1px solid rgba(255, 200, 120, 0.35);
+  border-radius: 12px; background: rgba(0, 0, 0, 0.4);
+  color: #fff8d0; font-size: 16px; outline: none; width: 240px;
+  box-shadow: inset 0 0 20px rgba(255, 180, 80, 0.08);
+  transition: all 0.3s ease;
 }
-input[type="text"]::placeholder {
-  color: rgba(255, 215, 120, 0.4);
+input[type="text"]:focus {
+  border-color: rgba(255, 230, 160, 0.65);
+  box-shadow: 0 0 30px rgba(255, 190, 100, 0.25), inset 0 0 20px rgba(255, 180, 80, 0.12);
 }
+input[type="text"]::placeholder { color: rgba(255, 220, 150, 0.45); }
 button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #ffd27a;
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-  pointer-events: auto;
+  padding: 14px 30px; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, #fff6d0 0%, #ffcc66 40%, #ff8c42 80%, #ff69b4 100%);
+  color: #1a0f05; font-weight: 800; font-size: 16px; cursor: pointer;
+  pointer-events: auto; letter-spacing: 2px;
+  box-shadow: 0 0 30px rgba(255, 170, 90, 0.35);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative; overflow: hidden;
+}
+button::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  transform: translateX(-100%);
+  animation: scanBtn 3s ease-in-out infinite;
 }
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 204, 102, 0.6);
+  transform: scale(1.06);
+  box-shadow: 0 0 55px rgba(255, 190, 100, 0.6);
+}
+@keyframes scanBtn {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
 }
 .back-link {
-  color: #ffd27a;
-  text-decoration: none;
-  font-size: 14px;
-  opacity: 0.7;
-  pointer-events: auto;
+  color: rgba(200, 230, 255, 0.85); text-decoration: none; font-size: 14px;
+  pointer-events: auto; transition: 0.2s; text-shadow: 0 0 10px rgba(120,190,255,0.4);
 }
-.back-link:hover { opacity: 1; }
+.back-link:hover { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.6); }
 .tip {
-  font-size: 12px;
-  opacity: 0.6;
+  font-size: 12px; opacity: 0.55; color: rgba(200, 230, 255, 0.75); letter-spacing: 1px;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<canvas id="foxCanvas"></canvas>
+<div id="canvas-container"></div>
 
-<div class="ui header">
-  <h1 id="groupTitle">涂山一团 · 九尾天狐</h1>
-  <p id="groupDesc">已有 <span id="litCount">0</span> 人点亮星团</p>
-</div>
-
-<div class="ui controls">
-  <div class="input-row">
-    <input type="text" id="nickInput" maxlength="12" placeholder="输入你的昵称">
-    <button onclick="lightUp()">点亮星团</button>
+<div class="ui">
+  <div class="header">
+    <h1 id="groupTitle">涂山一团 · 九尾天狐</h1>
+    <p>已有 <span id="litCount">0</span> 人点亮星团</p>
   </div>
-  <div class="tip">昵称会保存在浏览器本地，下次访问依然显示</div>
-  <a class="back-link" href="./index.html">← 返回涂山星图</a>
+
+  <div class="controls">
+    <div class="input-row">
+      <input type="text" id="nickInput" maxlength="10" placeholder="输入你的昵称">
+      <button onclick="lightUp()">点亮星团</button>
+    </div>
+    <div class="tip">昵称会保存在浏览器本地，下次访问依然显示</div>
+    <a class="back-link" href="./index.html">← 返回涂山星图</a>
+  </div>
 </div>
 
-<script>
-// ===== 参数与数据 =====
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
+
 const params = new URLSearchParams(location.search);
 const group = params.get('group') || '1';
-const groupNames = {
-  '1': '涂山一团',
-  '2': '涂山二团',
-  '3': '涂山三团'
-};
+const groupNames = { '1': '涂山一团', '2': '涂山二团', '3': '涂山三团' };
 document.getElementById('groupTitle').textContent = (groupNames[group] || '涂山') + ' · 九尾天狐';
 
 const storageKey = 'tushan_group_' + group;
 function getLitList() {
-  try {
-    return JSON.parse(localStorage.getItem(storageKey) || '[]');
-  } catch (e) { return []; }
+  try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); }
+  catch (e) { return []; }
 }
-function saveLitList(list) {
-  localStorage.setItem(storageKey, JSON.stringify(list));
-}
+function saveLitList(list) { localStorage.setItem(storageKey, JSON.stringify(list)); }
 
-// ===== 生成九尾天狐光点坐标 =====
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x02040a, 0.00075);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 5000);
+camera.position.set(0, 100, 560);
+
+const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.35;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+container.appendChild(renderer.domElement);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 2.2, 0.5, 0.75);
+composer.addPass(bloomPass);
+
+const chromaticAberrationShader = {
+  uniforms: { tDiffuse: { value: null }, amount: { value: 0.005 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float amount; varying vec2 vUv;
+    void main(){
+      vec2 dir=vUv-0.5; float dist=length(dir); vec2 off=dir*amount*dist*(1.0+dist*1.8);
+      gl_FragColor=vec4(texture2D(tDiffuse,vUv+off).r, texture2D(tDiffuse,vUv+off*0.45).g, texture2D(tDiffuse,vUv-off).b, 1.0);
+    }
+  `
+};
+composer.addPass(new ShaderPass(chromaticAberrationShader));
+
+const bokehPass = new BokehPass(scene, camera, {
+  focus: 560, aperture: 0.0003, maxblur: 0.008,
+  width: window.innerWidth, height: window.innerHeight
+});
+composer.addPass(bokehPass);
+
+const vignetteShader = {
+  uniforms: { tDiffuse: { value: null }, intensity: { value: 1.3 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float intensity; varying vec2 vUv;
+    void main(){
+      vec4 c=texture2D(tDiffuse,vUv); vec2 uv=vUv*2.0-1.0;
+      float v=1.0-dot(uv,uv)*0.32*intensity;
+      gl_FragColor=vec4(c.rgb*smoothstep(0.12,1.0,v),1.0);
+    }
+  `
+};
+composer.addPass(new ShaderPass(vignetteShader));
+
+function createGlowTexture() {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 128;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(64, 64, 2, 64, 64, 62);
+  g.addColorStop(0, 'rgba(255, 250, 235, 1)');
+  g.addColorStop(0.25, 'rgba(255, 210, 130, 0.55)');
+  g.addColorStop(0.55, 'rgba(255, 140, 180, 0.2)');
+  g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+const glowTexture = createGlowTexture();
+
+function createGalaxyTexture() {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 256;
+  const x = c.getContext('2d');
+  x.fillStyle = '#000'; x.fillRect(0,0,256,256);
+  for (let i=0;i<600;i++){
+    const angle = Math.random()*Math.PI*2;
+    const dist = Math.pow(Math.random(), 0.6) * 110;
+    const px = 128 + Math.cos(angle)*dist;
+    const py = 128 + Math.sin(angle)*dist;
+    const s = Math.random()*1.5;
+    const a = Math.random()*0.8;
+    x.fillStyle = `rgba(${200+Math.random()*55|0}, ${180+Math.random()*75|0}, 255, ${a})`;
+    x.beginPath(); x.arc(px,py,s,0,Math.PI*2); x.fill();
+  }
+  return new THREE.CanvasTexture(c);
+}
+const galaxyTexture = createGalaxyTexture();
+
+function createNebulaTexture() {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 512;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(256,256,20,256,256,240);
+  g.addColorStop(0, 'rgba(170,205,255,0.4)');
+  g.addColorStop(0.35, 'rgba(210,165,255,0.18)');
+  g.addColorStop(0.65, 'rgba(255,150,195,0.1)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0,0,512,512);
+  return new THREE.CanvasTexture(c);
+}
+const nebulaTexture = createNebulaTexture();
+
+// ===== 九尾天狐生成 =====
 const foxPoints = [];
-
-// 身体：垂直椭圆，中心(0, 55)，宽55，高95
-for (let i = 0; i < 24; i++) {
-  const a = (i / 24) * Math.PI * 2;
-  foxPoints.push({
-    x: Math.cos(a) * 28,
-    y: 55 + Math.sin(a) * 48,
-    part: 'body'
-  });
+function addPoint(x,y,z,part,tailId=0){
+  foxPoints.push({x,y,z,part,tailId,phase:Math.random()*Math.PI*2});
 }
 
-// 头部：椭圆，中心(0, -20)，宽42，高50
-for (let i = 0; i < 16; i++) {
-  const a = (i / 16) * Math.PI * 2;
-  foxPoints.push({
-    x: Math.cos(a) * 22,
-    y: -20 + Math.sin(a) * 26,
-    part: 'head'
-  });
+// 身体：椭圆体 + 胸腔隆起
+for (let i=0;i<160;i++){
+  const a = Math.random()*Math.PI*2;
+  const b = Math.random()*Math.PI;
+  const rx=42, ry=75, rz=26;
+  const x = Math.sin(b)*Math.cos(a)*rx;
+  const y = Math.cos(b)*ry + 45;
+  const z = Math.sin(b)*Math.sin(a)*rz;
+  addPoint(x,y,z,0.05);
 }
-
-// 耳朵：两个三角形
-function addEar(cx, cy, angle) {
-  for (let i = 0; i < 5; i++) {
-    const t = i / 4;
-    foxPoints.push({
-      x: cx + Math.cos(angle) * t * 22,
-      y: cy + Math.sin(angle) * t * 28 - (1 - t) * 5,
-      part: 'ear'
-    });
+// 胸腔/肩部隆起
+for (let i=0;i<80;i++){
+  const a=Math.random()*Math.PI*2, r=Math.random()*35;
+  addPoint(Math.cos(a)*r, 25+Math.sin(a)*r*0.3, Math.sin(a)*r+8, 0.08);
+}
+// 头部
+for (let i=0;i<120;i++){
+  const a=Math.random()*Math.PI*2, b=Math.random()*Math.PI;
+  const rx=32, ry=38, rz=24;
+  const x = Math.sin(b)*Math.cos(a)*rx;
+  const y = Math.cos(b)*ry - 42;
+  const z = Math.sin(b)*Math.sin(a)*rz + 18;
+  addPoint(x,y,z,0.2);
+}
+// 吻部
+for (let i=0;i<50;i++){
+  const t=Math.random();
+  addPoint((Math.random()-0.5)*14, -70 - t*28, 34 + t*22, 0.22);
+}
+// 耳朵
+function addEar(cx,cy,ang){
+  for (let i=0;i<60;i++){
+    const t=Math.pow(Math.random(),0.7);
+    const w = (1-t)*18 + 4;
+    const px = cx + Math.cos(ang)*t*28 + (Math.random()-0.5)*w;
+    const py = cy - 5 + Math.sin(ang)*t*42 - t*t*12 + (Math.random()-0.5)*w;
+    const pz = 22 + t*20 + (Math.random()-0.5)*8;
+    addPoint(px,py,pz,0.35);
   }
 }
-addEar(-14, -42, -0.5);
-addEar(14, -42, -Math.PI + 0.5);
+addEar(-18,-58,-0.55);
+addEar(18,-58,Math.PI+0.55);
 
-// 九条尾巴：从身体背部扇形展开
-for (let t = 0; t < 9; t++) {
-  const angle = -Math.PI / 2 - 1.1 + (t / 8) * 2.2;
-  const tailLen = 115 + (t % 3) * 18;
-  const bend = (t - 4) * 0.12;
-  for (let i = 1; i <= 7; i++) {
-    const r = (i / 7) * tailLen;
-    const wave = Math.sin(i * 0.8) * 12;
-    foxPoints.push({
-      x: Math.cos(angle + bend * (i / 7)) * r + wave * Math.cos(angle + Math.PI / 2),
-      y: 15 + Math.sin(angle + bend * (i / 7)) * r + wave * Math.sin(angle + Math.PI / 2),
-      part: 'tail'
-    });
+// 前腿
+for (let leg=0;leg<2;leg++){
+  const sx = leg===0 ? -22 : 22;
+  for (let i=0;i<70;i++){
+    const t=Math.random();
+    const r = 12 - t*3;
+    const px = sx + (Math.random()-0.5)*r;
+    const py = 25 - t*95;
+    const pz = 18 + t*8 + (Math.random()-0.5)*r;
+    addPoint(px,py,pz,0.12);
+  }
+}
+// 后腿
+for (let leg=0;leg<2;leg++){
+  const sx = leg===0 ? -30 : 30;
+  for (let i=0;i<60;i++){
+    const t=Math.random();
+    const r = 14 - t*3;
+    const px = sx + (Math.random()-0.5)*r;
+    const py = 55 - t*80;
+    const pz = -18 + t*5 + (Math.random()-0.5)*r;
+    addPoint(px,py,pz,0.1);
   }
 }
 
-// ===== Canvas 初始化 =====
-const bg = document.getElementById('bg');
-const bgCtx = bg.getContext('2d');
-const canvas = document.getElementById('foxCanvas');
-const ctx = canvas.getContext('2d');
-
-let width, height, cx, cy, scale;
-let stars = [];
-
-function resize() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  bg.width = width; bg.height = height;
-  canvas.width = width; canvas.height = height;
-  cx = width / 2;
-  cy = height / 2;
-  scale = Math.min(width, height) / 360;
-}
-window.addEventListener('resize', resize);
-resize();
-
-// 星空背景
-for (let i = 0; i < 180; i++) {
-  stars.push({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    r: Math.random() * 1.2 + 0.2,
-    a: Math.random() * Math.PI * 2,
-    speed: Math.random() * 0.02 + 0.005
-  });
+// 九条尾巴：巨型扇形，每条携带银河旋臂
+for (let t=0;t<9;t++){
+  const baseAngle = -Math.PI/2 - 1.15 + (t/8)*2.3;
+  const tailLen = 260 + (t%3)*50;
+  const bend = (t-4)*0.1;
+  const thickness = 18 - Math.abs(t-4)*1.5;
+  for (let i=0;i<260;i++){
+    const r = (i/260)*tailLen;
+    const wave = Math.sin(i*0.4)*12 + Math.cos(i*0.7)*6;
+    const angle = baseAngle + bend*(r/tailLen) + Math.sin(r*0.02)*0.08;
+    const spread = thickness * (1 - r/tailLen*0.7) + (Math.random()-0.5)*8;
+    const px = Math.cos(angle)*r + wave*Math.cos(angle+Math.PI/2) + (Math.random()-0.5)*spread;
+    const py = 22 + Math.sin(angle)*r + wave*Math.sin(angle+Math.PI/2) + (Math.random()-0.5)*spread*0.5;
+    const pz = -r*0.15 - Math.abs(t-4)*8 + (Math.random()-0.5)*spread;
+    addPoint(px,py,pz,0.55 + (t/9)*0.45, t);
+  }
+  // 尾巴边缘狐火
+  for (let i=0;i<60;i++){
+    const r = tailLen - Math.random()*40;
+    const angle = baseAngle + bend*(r/tailLen);
+    const px = Math.cos(angle)*r + (Math.random()-0.5)*35;
+    const py = 22 + Math.sin(angle)*r + (Math.random()-0.5)*35;
+    const pz = -r*0.15 - Math.abs(t-4)*8 + (Math.random()-0.5)*25;
+    addPoint(px,py,pz,0.92, t);
+  }
 }
 
-function drawBackground() {
-  bgCtx.fillStyle = '#000';
-  bgCtx.fillRect(0, 0, width, height);
-  stars.forEach(s => {
-    s.a += s.speed;
-    const alpha = 0.3 + Math.abs(Math.sin(s.a)) * 0.6;
-    bgCtx.beginPath();
-    bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    bgCtx.fillStyle = `rgba(255, 215, 120, ${alpha})`;
-    bgCtx.fill();
-  });
-  requestAnimationFrame(drawBackground);
-}
-drawBackground();
+const foxGeo = new THREE.BufferGeometry();
+const foxPos = new Float32Array(foxPoints.length*3);
+const foxPart = new Float32Array(foxPoints.length);
+const foxTail = new Float32Array(foxPoints.length);
+const foxPhase = new Float32Array(foxPoints.length);
+foxPoints.forEach((p,i)=>{
+  foxPos[i*3]=p.x; foxPos[i*3+1]=p.y; foxPos[i*3+2]=p.z;
+  foxPart[i]=p.part; foxTail[i]=p.tailId; foxPhase[i]=p.phase;
+});
+foxGeo.setAttribute('position', new THREE.BufferAttribute(foxPos,3));
+foxGeo.setAttribute('part', new THREE.BufferAttribute(foxPart,1));
+foxGeo.setAttribute('tail', new THREE.BufferAttribute(foxTail,1));
+foxGeo.setAttribute('phase', new THREE.BufferAttribute(foxPhase,1));
 
-// 转换坐标到画布
-function toCanvas(p) {
-  return {
-    x: cx + p.x * scale,
-    y: cy + p.y * scale
-  };
-}
+const foxMat = new THREE.ShaderMaterial({
+  uniforms: {
+    uTime: { value: 0 },
+    uTexture: { value: glowTexture },
+    uGalaxy: { value: galaxyTexture }
+  },
+  vertexShader: `
+    attribute float part; attribute float tail; attribute float phase;
+    uniform float uTime;
+    varying float vPart; varying float vEnergy; varying float vTail; varying vec2 vUv; varying float vPhase;
+    void main(){
+      vPart = part; vTail = tail; vPhase = phase;
+      vec3 p = position;
+      float breath = 1.0 + sin(uTime*0.7 + phase)*0.018;
+      p *= breath;
 
-// 绘制星团
-function drawFox() {
-  ctx.clearRect(0, 0, width, height);
-  const list = getLitList();
+      // 尾巴群体摆动
+      if(part > 0.5){
+        float sway = sin(uTime*0.55 + tail*0.7 + p.y*0.015) * (p.y*0.018);
+        float sway2 = cos(uTime*0.4 + tail*0.5 + p.y*0.01) * (p.y*0.008);
+        p.x += sway*14.0 + sway2*8.0;
+        p.z += cos(uTime*0.45 + tail*0.6 + p.y*0.012) * 7.0;
+        p.y += sin(uTime*0.5 + tail + p.x*0.01) * 3.0;
+      }
 
-  // 画连线：尾巴与身体、头与身体
-  ctx.strokeStyle = 'rgba(255, 204, 102, 0.12)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i < foxPoints.length - 1; i++) {
-    if (foxPoints[i].part === foxPoints[i + 1].part && foxPoints[i].part !== 'tail') {
-      const p1 = toCanvas(foxPoints[i]);
-      const p2 = toCanvas(foxPoints[i + 1]);
-      ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
-      ctx.stroke();
+      // 全身能量脉冲
+      vEnergy = 0.55 + 0.45 * sin(uTime*1.4 + phase);
+
+      // 纹理坐标
+      vUv = vec2(p.x*0.01 + uTime*0.03, p.y*0.01 + uTime*0.02);
+
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      float size = 7.0 + part*7.0;
+      if(part > 0.9) size = 10.0;
+      gl_PointSize = size * (520.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
     }
+  `,
+  fragmentShader: `
+    uniform sampler2D uTexture; uniform sampler2D uGalaxy;
+    varying float vPart; varying float vEnergy; varying vec2 vUv; varying float vPhase;
+    void main(){
+      vec4 tex = texture2D(uTexture, gl_PointCoord);
+      vec3 c;
+      if(vPart < 0.15){
+        c = mix(vec3(1.0,0.95,0.82), vec3(1.0,0.85,0.38), vPart*6.0);
+      } else if(vPart < 0.3){
+        c = mix(vec3(1.0,0.88,0.65), vec3(1.0,0.82,0.45), (vPart-0.15)*6.67);
+      } else if(vPart < 0.5){
+        c = mix(vec3(1.0,0.78,0.55), vec3(1.0,0.68,0.42), (vPart-0.3)*5.0);
+      } else if(vPart < 0.9){
+        float t = (vPart-0.5)/0.4;
+        vec3 gold = vec3(1.0,0.85,0.35);
+        vec3 blue = vec3(0.45,0.78,1.0);
+        vec3 purple = vec3(0.78,0.55,1.0);
+        c = mix(mix(gold, blue, t), purple, t*t*0.7);
+        vec4 gal = texture2D(uGalaxy, vUv*2.0 + vec2(vPhase*0.1, 0.0));
+        c += gal.rgb * 0.4;
+      } else {
+        c = mix(vec3(1.0,0.5,0.7), vec3(1.0,0.8,0.95), sin(vPhase)*0.5+0.5);
+      }
+      gl_FragColor = vec4(c * vEnergy, 1.0) * tex;
+    }
+  `,
+  transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+});
+const foxSystem = new THREE.Points(foxGeo, foxMat);
+scene.add(foxSystem);
+
+// 狐狸神圣轮廓光
+const lineGeo = new THREE.BufferGeometry();
+const linePos = [];
+for (let i=0;i<foxPoints.length-1;i++){
+  if (Math.abs(foxPoints[i].part - foxPoints[i+1].part) < 0.08 && foxPoints[i].tail === foxPoints[i+1].tail){
+    linePos.push(foxPoints[i].x, foxPoints[i].y, foxPoints[i].z);
+    linePos.push(foxPoints[i+1].x, foxPoints[i+1].y, foxPoints[i+1].z);
   }
+}
+lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePos),3));
+const lineMat = new THREE.ShaderMaterial({
+  uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0xffaa66) } },
+  vertexShader: `attribute float phase; varying float vAlpha; void main(){ vAlpha=0.4; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: `uniform float uTime; uniform vec3 uColor; varying float vAlpha; void main(){ gl_FragColor=vec4(uColor, 0.12 + 0.08*sin(uTime*2.0)); }`,
+  transparent: true, blending: THREE.AdditiveBlending
+});
+const foxLines = new THREE.LineSegments(lineGeo, lineMat);
+scene.add(foxLines);
 
-  // 画光点
-  foxPoints.forEach((p, idx) => {
-    const cp = toCanvas(p);
-    const lit = list.find(item => item.idx === idx);
+// ===== 仙子生成 =====
+const fairyGroup = new THREE.Group();
+// 仙子依偎在天狐前腿之间，身体略侧
+fairyGroup.position.set(0, -38, 58);
+fairyGroup.rotation.y = 0.15;
+scene.add(fairyGroup);
 
-    ctx.beginPath();
-    ctx.arc(cp.x, cp.y, lit ? 5 : 2.5, 0, Math.PI * 2);
-    if (lit) {
-      const g = ctx.createRadialGradient(cp.x, cp.y, 1, cp.x, cp.y, 16);
-      g.addColorStop(0, 'rgba(255, 220, 120, 1)');
-      g.addColorStop(0.5, 'rgba(255, 180, 60, 0.4)');
-      g.addColorStop(1, 'rgba(255, 180, 60, 0)');
-      ctx.fillStyle = g;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(cp.x, cp.y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#fff8d0';
-      ctx.fill();
-
-      // 昵称
-      ctx.fillStyle = '#ffd27a';
-      ctx.font = '12px Microsoft YaHei';
-      ctx.textAlign = 'center';
-      ctx.fillText(lit.name, cp.x, cp.y + 22);
+function createFairyPart(count, cfg){
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count*3);
+  const phase = new Float32Array(count);
+  const type = new Float32Array(count);
+  for (let i=0;i<count;i++){
+    const t = Math.random();
+    if (cfg.shape === 'dress'){
+      const y = -cfg.range + t*(cfg.range*1.6);
+      const flare = 1.0 - (y + cfg.range)/(cfg.range*2.0);
+      const r = flare*cfg.range*0.9 + 4 + (Math.random()-0.5)*6;
+      const a = Math.random()*Math.PI*2;
+      pos[i*3] = Math.cos(a)*r + (Math.random()-0.5)*10;
+      pos[i*3+1] = y;
+      pos[i*3+2] = Math.sin(a)*r*0.35 + (Math.random()-0.5)*8;
+    } else if (cfg.shape === 'hair'){
+      const strand = Math.floor(Math.random()*12);
+      const a = (strand/12)*Math.PI*2;
+      const len = cfg.range*0.6 + Math.random()*cfg.range*0.5;
+      const y = -Math.random()*len;
+      const r = 6 + Math.random()*14 + (-y)*0.15;
+      pos[i*3] = Math.cos(a)*r + Math.sin(y*0.2 + strand)*6;
+      pos[i*3+1] = y + 18;
+      pos[i*3+2] = Math.sin(a)*r*0.4 + Math.cos(y*0.15)*5;
+    } else if (cfg.shape === 'body'){
+      const a=Math.random()*Math.PI*2, b=Math.random()*Math.PI;
+      pos[i*3] = Math.sin(b)*Math.cos(a)*cfg.range*0.35;
+      pos[i*3+1] = Math.cos(b)*cfg.range*0.55 + 6;
+      pos[i*3+2] = Math.sin(b)*Math.sin(a)*cfg.range*0.25;
+    } else if (cfg.shape === 'ribbon'){
+      const idx = Math.floor(Math.random()*5);
+      const a = (idx/5)*Math.PI*2;
+      const l = t*cfg.range;
+      pos[i*3] = Math.cos(a)* (8 + l*0.6) + Math.sin(l*0.2 + idx)*5;
+      pos[i*3+1] = -8 - l*0.7;
+      pos[i*3+2] = Math.sin(a)*(4 + l*0.3) + Math.cos(l*0.15)*4;
     } else {
-      ctx.fillStyle = 'rgba(255, 204, 102, 0.25)';
-      ctx.fill();
+      pos[i*3] = (Math.random()-0.5)*cfg.range;
+      pos[i*3+1] = (Math.random()-0.5)*cfg.range;
+      pos[i*3+2] = (Math.random()-0.5)*cfg.range;
     }
+    phase[i] = Math.random()*Math.PI*2;
+    type[i] = cfg.type || 0;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('phase', new THREE.BufferAttribute(phase,1));
+  geo.setAttribute('type', new THREE.BufferAttribute(type,1));
+  const c = new THREE.Color(cfg.color);
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uTexture: { value: glowTexture },
+      uColor: { value: new THREE.Vector3(c.r,c.g,c.b) },
+      uSize: { value: cfg.size },
+      uShape: { value: cfg.shape === 'dress' ? 0.0 : cfg.shape === 'hair' ? 1.0 : 2.0 }
+    },
+    vertexShader: `
+      attribute float phase; attribute float type;
+      uniform float uTime; uniform float uSize; uniform float uShape;
+      varying float vAlpha; varying vec3 vColor; uniform vec3 uColor;
+      void main(){
+        vec3 p = position;
+        if(uShape < 0.5){
+          p.y += sin(uTime*0.9 + phase)*2.5;
+          p.x += cos(uTime*0.5 + phase)*1.2;
+          p.z += sin(uTime*0.35 + phase)*0.8;
+        } else if(uShape < 1.5){
+          p.x += sin(uTime*0.7 + phase)*2.0;
+          p.z += cos(uTime*0.5 + phase)*1.5;
+          p.y += sin(uTime*0.4 + phase + position.x*0.1)*1.5;
+        } else {
+          p.y += sin(uTime*0.8 + phase)*1.0;
+        }
+        vAlpha = 0.5 + 0.5*sin(uTime*0.9 + phase);
+        vColor = uColor;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = uSize * (1.0 + 0.3*sin(uTime+phase)) * (420.0 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D uTexture;
+      varying float vAlpha; varying vec3 vColor;
+      void main(){ gl_FragColor = vec4(vColor, vAlpha) * texture2D(uTexture, gl_PointCoord); }
+    `,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
   });
+  return new THREE.Points(geo, mat);
+}
 
+fairyGroup.add(createFairyPart(900, { shape:'dress', range:55, color:0xffffff, size:3.6 }));
+fairyGroup.add(createFairyPart(700, { shape:'hair', range:70, color:0xa8d8ff, size:3.0 }));
+fairyGroup.add(createFairyPart(120, { shape:'body', range:16, color:0xffe8c8, size:4.5 }));
+fairyGroup.add(createFairyPart(300, { shape:'ribbon', range:70, color:0xc8e8ff, size:2.6 }));
+
+// 仙子轻纱飘带（线条）
+const ribbons = [];
+for (let i=0;i<6;i++){
+  const geo = new THREE.BufferGeometry();
+  const pos = [];
+  const angle = (i/6)*Math.PI*2;
+  for (let j=0;j<40;j++){
+    const t=j/39;
+    pos.push(Math.cos(angle)*(10+t*35), -18-t*75, Math.sin(angle)*(6+t*18));
+  }
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uTime:{value:0}, uColor:{value:new THREE.Color(0xd0e8ff)} },
+    vertexShader: `uniform float uTime; varying float vAlpha; void main(){ vAlpha=1.0-position.y*0.01; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `uniform float uTime; uniform vec3 uColor; varying float vAlpha; void main(){ gl_FragColor=vec4(uColor, 0.18*vAlpha); }`,
+    transparent: true, blending: THREE.AdditiveBlending
+  });
+  const ribbon = new THREE.Line(geo, mat);
+  ribbon.userData = { angle, speed: 0.4 + Math.random()*0.4 };
+  fairyGroup.add(ribbon);
+  ribbons.push(ribbon);
+}
+
+// ===== 环绕星团 =====
+const rings = [];
+const ringConfigs = [
+  { radius: 130, count: 100, speed: 0.0018, tiltX: 0.22, tiltY: 0.12, color: 0xffe0a0, size: 4.2 },
+  { radius: 210, count: 150, speed: -0.0014, tiltX: -0.32, tiltY: 0.42, color: 0xffaa68, size: 3.4 },
+  { radius: 300, count: 210, speed: 0.0011, tiltX: 0.52, tiltY: -0.22, color: 0x98ccff, size: 2.8 },
+  { radius: 400, count: 270, speed: -0.00085, tiltX: -0.42, tiltY: 0.48, color: 0xc8a0ff, size: 2.2 },
+  { radius: 520, count: 340, speed: 0.00065, tiltX: 0.32, tiltY: 0.32, color: 0xffa0c8, size: 1.9 }
+];
+
+ringConfigs.forEach(cfg => {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(cfg.count*3);
+  const phase = new Float32Array(cfg.count);
+  for (let i=0;i<cfg.count;i++){
+    const a = (i/cfg.count)*Math.PI*2;
+    pos[i*3] = Math.cos(a)*cfg.radius;
+    pos[i*3+1] = (Math.random()-0.5)*6;
+    pos[i*3+2] = Math.sin(a)*cfg.radius;
+    phase[i] = Math.random()*Math.PI*2;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('phase', new THREE.BufferAttribute(phase,1));
+  const c = new THREE.Color(cfg.color);
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uTime:{value:0}, uTexture:{value:glowTexture}, uColor:{value:new THREE.Vector3(c.r,c.g,c.b)}, uSize:{value:cfg.size} },
+    vertexShader: `
+      attribute float phase; uniform float uTime; uniform float uSize; varying vec3 vColor; uniform vec3 uColor;
+      void main(){
+        vColor = uColor;
+        vec3 p = position;
+        p.y += sin(uTime*1.2 + phase)*3.0;
+        vec4 mv = modelViewMatrix * vec4(p,1.0);
+        gl_PointSize = uSize * (0.8 + 0.4*sin(uTime*2.0 + phase)) * (460.0/-mv.z);
+        gl_Position = projectionMatrix * mv;
+      }
+    `,
+    fragmentShader: `uniform sampler2D uTexture; varying vec3 vColor; void main(){ gl_FragColor = vec4(vColor,1.0)*texture2D(uTexture, gl_PointCoord); }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const ring = new THREE.Points(geo, mat);
+  ring.rotation.x = cfg.tiltX; ring.rotation.y = cfg.tiltY;
+  ring.userData = { speed: cfg.speed, radius: cfg.radius };
+  scene.add(ring); rings.push(ring);
+});
+
+// ===== 背景星空 =====
+function createStarField(count, range, colors, sizes){
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count*3);
+  const col = new Float32Array(count*3);
+  const size = new Float32Array(count);
+  const phase = new Float32Array(count);
+  for (let i=0;i<count;i++){
+    const r = range*(0.2+Math.random()*0.8);
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos(2*Math.random()-1);
+    pos[i*3] = r*Math.sin(phi)*Math.cos(theta);
+    pos[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
+    pos[i*3+2] = r*Math.cos(phi);
+    const c = new THREE.Color(colors[Math.floor(Math.random()*colors.length)]);
+    col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
+    size[i] = sizes[0] + Math.random()*(sizes[1]-sizes[0]);
+    phase[i] = Math.random()*Math.PI*2;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col,3));
+  geo.setAttribute('size', new THREE.BufferAttribute(size,1));
+  geo.setAttribute('phase', new THREE.BufferAttribute(phase,1));
+  const mat = new THREE.ShaderMaterial({
+    uniforms:{ uTime:{value:0}, uTexture:{value:glowTexture} },
+    vertexShader: `
+      attribute float size; attribute float phase; varying vec3 vColor; uniform float uTime;
+      void main(){ vColor=color; vec4 mv=modelViewMatrix*vec4(position,1.0); float twinkle=0.65+0.35*sin(uTime*1.6+phase); gl_PointSize=size*twinkle*(420.0/-mv.z); gl_Position=projectionMatrix*mv; }
+    `,
+    fragmentShader: `uniform sampler2D uTexture; varying vec3 vColor; void main(){ gl_FragColor=vec4(vColor,1.0)*texture2D(uTexture,gl_PointCoord); }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, vertexColors: true
+  });
+  return new THREE.Points(geo, mat);
+}
+scene.add(createStarField(25000, 1800, [0xffffff,0xd8ecff,0xfff6d0,0xffe0f0], [1.2,3.2]));
+scene.add(createStarField(12000, 1200, [0xa0d0ff,0xffd0a0,0xc8a0ff], [1.5,4]));
+
+// 背景星云
+for (let i=0;i<18;i++){
+  const mat = new THREE.SpriteMaterial({
+    map: nebulaTexture, transparent: true, opacity: 0.2 + Math.random()*0.12,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+    color: new THREE.Color().setHSL(0.58 + Math.random()*0.22, 0.7, 0.6)
+  });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(800+Math.random()*600, 800+Math.random()*600, 1);
+  sprite.position.set((Math.random()-0.5)*1600, (Math.random()-0.5)*900, -400-Math.random()*1200);
+  scene.add(sprite);
+}
+
+// ===== 体积光 God Rays =====
+const godRayGeo = new THREE.CylinderGeometry(1, 160, 1100, 32, 1, true);
+const godRayMat = new THREE.ShaderMaterial({
+  uniforms: { uTime:{value:0}, uColor:{value:new THREE.Color(0xffcc88)} },
+  vertexShader: `varying vec2 vUv; varying float vAlpha; void main(){ vUv=uv; vAlpha=1.0-uv.y; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform vec3 uColor; uniform float uTime; varying vec2 vUv; varying float vAlpha;
+    void main(){
+      float beam = smoothstep(0.0,0.22,vUv.x)*smoothstep(1.0,0.72,vUv.x);
+      float pulse = 0.4 + 0.6*sin(uTime*1.4 + vUv.y*12.0);
+      gl_FragColor = vec4(uColor, beam*vAlpha*0.08*pulse);
+    }
+  `,
+  transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+});
+for (let i=0;i<10;i++){
+  const ray = new THREE.Mesh(godRayGeo, godRayMat.clone());
+  ray.material.uniforms.uColor.value = new THREE.Color(i%3===0 ? 0xffcc88 : i%3===1 ? 0x8ec5ff : 0xffa0d0);
+  ray.position.set((Math.random()-0.5)*400, 320, -150-Math.random()*300);
+  ray.rotation.z = (Math.random()-0.5)*1.0;
+  ray.rotation.x = (Math.random()-0.5)*0.7;
+  scene.add(ray);
+}
+
+// 极光
+const auroraGeo = new THREE.PlaneGeometry(2600, 550, 144, 36);
+const auroraMat = new THREE.ShaderMaterial({
+  uniforms: { uTime:{value:0}, uColor1:{value:new THREE.Color(0x4fd1ff)}, uColor2:{value:new THREE.Color(0xff69b4)}, uColor3:{value:new THREE.Color(0x9f7aea)} },
+  vertexShader: `
+    varying vec2 vUv; varying float vAlpha; uniform float uTime;
+    void main(){
+      vUv=uv; vec3 p=position;
+      float wave = sin(p.x*0.007 + uTime*0.35)*40.0 + sin(p.x*0.016 + uTime*0.65)*20.0 + sin(p.x*0.03 + uTime)*8.0;
+      p.y += wave; p.z += cos(p.x*0.01 + uTime*0.45)*25.0;
+      vAlpha = 1.0 - abs(uv.y-0.5)*2.0;
+      gl_Position = projectionMatrix*modelViewMatrix*vec4(p,1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform float uTime; uniform vec3 uColor1,uColor2,uColor3; varying vec2 vUv; varying float vAlpha;
+    void main(){
+      float n=sin(vUv.x*10.0+uTime*0.5)*0.5+0.5;
+      float n2=sin(vUv.x*22.0-uTime*0.8)*0.5+0.5;
+      vec3 c=mix(uColor1,uColor3,n); c=mix(c,uColor2,n2*0.6);
+      float a=vAlpha*(0.5+0.5*sin(vUv.x*7.0+uTime))*0.2;
+      gl_FragColor=vec4(c,a);
+    }
+  `,
+  transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+});
+const aurora = new THREE.Mesh(auroraGeo, auroraMat);
+aurora.position.set(0, -220, -700);
+aurora.rotation.x = -0.08;
+scene.add(aurora);
+
+// 流星
+const meteors = [];
+function spawnMeteor(){
+  const count = 30;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count*3);
+  for (let i=0;i<count;i++){ pos[i*3]=0; pos[i*3+1]=0; pos[i*3+2]=-i*10; }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const mat = new THREE.ShaderMaterial({
+    uniforms:{ uColor:{value:new THREE.Color(0xfff8d0)} },
+    vertexShader: `void main(){ vec4 mv=modelViewMatrix*vec4(position,1.0); gl_PointSize=max(1.5, 4.5-position.z*0.08)*(420.0/-mv.z); gl_Position=projectionMatrix*mv; }`,
+    fragmentShader: `uniform vec3 uColor; void main(){ float d=length(gl_PointCoord-0.5); gl_FragColor=vec4(uColor, smoothstep(0.5,0.0,d)); }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const meteor = new THREE.Points(geo, mat);
+  meteor.position.set((Math.random()-0.5)*1400, 380+Math.random()*250, (Math.random()-0.5)*500);
+  meteor.userData = { vx: -12-Math.random()*10, vy: -6-Math.random()*6, vz: -5-Math.random()*5, life: 1 };
+  scene.add(meteor); meteors.push(meteor);
+}
+
+// ===== 昵称点亮系统 =====
+const litSprites = [];
+function createNameSprite(name){
+  const c = document.createElement('canvas'); c.width = 256; c.height = 64;
+  const x = c.getContext('2d');
+  x.font = 'bold 26px Microsoft YaHei';
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillStyle = 'rgba(255, 248, 215, 0.98)';
+  x.shadowColor = 'rgba(255, 160, 60, 0.95)'; x.shadowBlur = 18;
+  x.fillText(name, 128, 32);
+  const tex = new THREE.CanvasTexture(c);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending }));
+  sprite.scale.set(44, 11, 1);
+  return sprite;
+}
+
+function updateLitStars(){
+  litSprites.forEach(s => scene.remove(s));
+  litSprites.length = 0;
+  const list = getLitList();
+  list.forEach(item => {
+    const ring = rings[item.ringIndex];
+    if (!ring) return;
+    const positions = ring.geometry.attributes.position.array;
+    const pi = item.pointIndex % (positions.length/3);
+    ring.updateMatrixWorld();
+    const v = new THREE.Vector3(positions[pi*3], positions[pi*3+1], positions[pi*3+2]).applyMatrix4(ring.matrixWorld);
+
+    const glowGeo = new THREE.BufferGeometry();
+    glowGeo.setAttribute('position', new THREE.Float32BufferAttribute([v.x,v.y,v.z],3));
+    const glowMat = new THREE.PointsMaterial({
+      color: 0xfff0a0, size: 18, map: glowTexture,
+      transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false
+    });
+    const glow = new THREE.Points(glowGeo, glowMat);
+    scene.add(glow); litSprites.push(glow);
+
+    const sprite = createNameSprite(item.name);
+    sprite.position.set(v.x, v.y-16, v.z);
+    scene.add(sprite); litSprites.push(sprite);
+  });
   document.getElementById('litCount').textContent = list.length;
 }
+updateLitStars();
 
-// 初始绘制
-drawFox();
-
-// ===== 点亮逻辑 =====
-function lightUp() {
+window.lightUp = function(){
   const input = document.getElementById('nickInput');
   const name = input.value.trim();
-  if (!name) {
-    alert('请输入昵称');
-    return;
-  }
-
+  if (!name) { alert('请输入昵称'); return; }
   const list = getLitList();
-  if (list.some(item => item.name === name)) {
-    alert('该昵称已经点亮过星团');
-    return;
-  }
+  if (list.some(item => item.name === name)) { alert('该昵称已经点亮过星团'); return; }
 
-  // 找一个未点亮的光点
-  const usedIdx = new Set(list.map(item => item.idx));
-  let idx = -1;
-  for (let i = 0; i < foxPoints.length; i++) {
-    if (!usedIdx.has(i)) { idx = i; break; }
+  const used = new Set(list.map(item => item.ringIndex + '-' + item.pointIndex));
+  let found = null;
+  for (let ri=0; ri<rings.length && !found; ri++){
+    const count = rings[ri].geometry.attributes.position.count;
+    for (let pi=0; pi<count; pi++){
+      if (!used.has(ri+'-'+pi)) { found = { ringIndex: ri, pointIndex: pi }; break; }
+    }
   }
-  if (idx === -1) {
-    // 星团已满，随机覆盖一个旧的
-    idx = Math.floor(Math.random() * foxPoints.length);
-    const oldPos = list.findIndex(item => item.idx === idx);
-    if (oldPos !== -1) list.splice(oldPos, 1);
+  if (!found){
+    list.sort((a,b)=>a.time-b.time);
+    list.shift();
+    found = { ringIndex: 0, pointIndex: Math.floor(Math.random()*rings[0].geometry.attributes.position.count) };
   }
-
-  list.push({
-    name: name,
-    idx: idx,
-    time: Date.now()
-  });
-
+  list.push({ name, ringIndex: found.ringIndex, pointIndex: found.pointIndex, time: Date.now() });
   saveLitList(list);
   input.value = '';
-  drawFox();
+  updateLitStars();
+  spawnNameRipple(found.ringIndex, found.pointIndex);
+};
+
+document.getElementById('nickInput').addEventListener('keydown', e => { if (e.key === 'Enter') window.lightUp(); });
+
+// 点击交互波纹
+const ripples = [];
+document.addEventListener('click', e => {
+  if (e.target.closest('.input-row') || e.target.closest('.back-link')) return;
+  const ndc = new THREE.Vector2((e.clientX/window.innerWidth)*2-1, -(e.clientY/window.innerHeight)*2+1);
+  const ray = new THREE.Raycaster(); ray.setFromCamera(ndc, camera);
+  const dir = ray.ray.direction.clone().normalize();
+  const origin = camera.position.clone();
+  const ringGeo = new THREE.RingGeometry(2, 5, 64);
+  const ringMat = new THREE.ShaderMaterial({
+    uniforms:{ uTime:{value:0}, uColor:{value:new THREE.Color(0xffcc88)} },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `
+      uniform float uTime; uniform vec3 uColor; varying vec2 vUv;
+      void main(){ float r=length(vUv-0.5)*2.0; float a=smoothstep(1.0,0.0,r)*smoothstep(0.0,0.25,abs(r-uTime)); gl_FragColor=vec4(uColor,a*0.85); }
+    `,
+    transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.position.copy(origin).add(dir.multiplyScalar(320));
+  ring.lookAt(camera.position);
+  ring.userData = { birth: performance.now(), life: 1.4 };
+  scene.add(ring); ripples.push(ring);
+});
+
+function spawnNameRipple(ringIndex, pointIndex){
+  const ring = rings[ringIndex];
+  ring.updateMatrixWorld();
+  const positions = ring.geometry.attributes.position.array;
+  const v = new THREE.Vector3(positions[pointIndex*3], positions[pointIndex*3+1], positions[pointIndex*3+2]).applyMatrix4(ring.matrixWorld);
+  for (let i=0;i<3;i++){
+    const rg = new THREE.RingGeometry(3, 8, 64);
+    const rm = new THREE.ShaderMaterial({
+      uniforms:{ uTime:{value:0}, uColor:{value:new THREE.Color(i===0?0xffcc88:i===1?0x8ec5ff:0xffa0d0)} },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+      fragmentShader: `uniform float uTime; uniform vec3 uColor; varying vec2 vUv; void main(){ float r=length(vUv-0.5)*2.0; float a=smoothstep(1.0,0.0,r)*smoothstep(0.0,0.25,abs(r-uTime)); gl_FragColor=vec4(uColor,a); }`,
+      transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+    });
+    const r = new THREE.Mesh(rg, rm);
+    r.position.copy(v);
+    r.lookAt(camera.position);
+    r.userData = { birth: performance.now() + i*150, life: 1.2 };
+    scene.add(r); ripples.push(r);
+  }
 }
 
-// 回车点亮
-document.getElementById('nickInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') lightUp();
+// ===== 动画 =====
+let time = 0;
+let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+document.addEventListener('mousemove', e => {
+  mouseX = (e.clientX/window.innerWidth)*2-1;
+  mouseY = -(e.clientY/window.innerHeight)*2+1;
+});
+
+let frame = 0;
+let lastTime = performance.now();
+
+function animate(){
+  requestAnimationFrame(animate);
+  const now = performance.now();
+  const dt = Math.min((now-lastTime)/1000, 0.05);
+  lastTime = now;
+  time += dt;
+  frame++;
+
+  // 电影运镜：缓慢环绕 + 鼠标视差 + 焦点呼吸
+  const camR = 560 + Math.sin(time*0.1)*40;
+  const angle = time*0.06 + mouseX*0.35;
+  targetX += (mouseX*70 - targetX)*0.02;
+  targetY += (mouseY*45 - targetY)*0.02;
+  camera.position.x = Math.sin(angle)*camR + targetX*0.4;
+  camera.position.z = Math.cos(angle)*camR + targetX*0.2;
+  camera.position.y = 100 + targetY + Math.sin(time*0.25)*15;
+  camera.lookAt(0, 10, 0);
+  bokehPass.uniforms.focus.value = camR + Math.sin(time*0.4)*60;
+
+  // 更新狐狸
+  foxMat.uniforms.uTime.value = time;
+  lineMat.uniforms.uTime.value = time;
+
+  // 更新仙子
+  fairyGroup.position.y = -38 + Math.sin(time*0.4)*3;
+  fairyGroup.children.forEach(child => {
+    if (child.material.uniforms && child.material.uniforms.uTime) child.material.uniforms.uTime.value = time;
+  });
+  ribbons.forEach(r => {
+    r.rotation.y += r.userData.speed*0.003;
+  });
+
+  // 更新星团
+  rings.forEach(ring => {
+    ring.rotation.z += ring.userData.speed;
+    if (ring.material.uniforms && ring.material.uniforms.uTime) ring.material.uniforms.uTime.value = time;
+  });
+
+  // 更新体积光、极光
+  scene.children.forEach(child => {
+    if (child.material && child.material.uniforms && child.material.uniforms.uTime) {
+      child.material.uniforms.uTime.value = time;
+    }
+  });
+
+  // 流星
+  if (frame % 50 === 0) spawnMeteor();
+  for (let i=meteors.length-1;i>=0;i--){
+    const m = meteors[i];
+    m.position.x += m.userData.vx; m.position.y += m.userData.vy; m.position.z += m.userData.vz;
+    m.userData.life -= dt*0.9;
+    m.material.opacity = Math.max(0, m.userData.life);
+    if (m.userData.life <= 0) { scene.remove(m); meteors.splice(i,1); }
+  }
+
+  // 波纹
+  for (let i=ripples.length-1;i>=0;i--){
+    const r = ripples[i];
+    const birth = r.userData.birth;
+    const age = (now - birth)/1000;
+    if (age < 0) continue;
+    const t = age / r.userData.life;
+    r.scale.setScalar(1 + t*22);
+    r.material.uniforms.uTime.value = t;
+    r.material.opacity = 1 - t;
+    if (t >= 1) { scene.remove(r); ripples.splice(i,1); }
+  }
+
+  // 更新点亮星点位置
+  rings.forEach(ring => ring.updateMatrixWorld());
+  litSprites.forEach((s,i) => {
+    const list = getLitList();
+    const idx = Math.floor(i/2);
+    if (!list[idx]) return;
+    const ring = rings[list[idx].ringIndex];
+    const positions = ring.geometry.attributes.position.array;
+    const pi = list[idx].pointIndex;
+    const v = new THREE.Vector3(positions[pi*3], positions[pi*3+1], positions[pi*3+2]).applyMatrix4(ring.matrixWorld);
+    if (s.isPoints) { s.geometry.attributes.position.setXYZ(0, v.x, v.y, v.z); s.geometry.attributes.position.needsUpdate = true; }
+    else { s.position.set(v.x, v.y-16, v.z); }
+  });
+
+  composer.render();
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  bloomPass.setSize(window.innerWidth, window.innerHeight);
+  bokehPass.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
 </body>
