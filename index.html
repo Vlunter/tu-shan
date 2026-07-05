@@ -2,265 +2,161 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>涂山世界 · 官方招募</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>涂山星图 · 九尾天狐</title>
 <style>
-body{
-margin:0;
-overflow:hidden;
-font-family:"Microsoft YaHei";
-background:black;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  overflow: hidden;
+  font-family: "Microsoft YaHei", sans-serif;
+  background: #000;
+  color: #ffd27a;
 }
-
-/* ===== Three背景 ===== */
-canvas{
-position:absolute;
-top:0;
-left:0;
-z-index:0;
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
-
-/* ===== Loading ===== */
-#loading{
-position:absolute;
-width:100%;
-height:100%;
-background:black;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-color:#ffd27a;
-z-index:30;
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
-
-.bar{
-width:320px;
-height:8px;
-border:1px solid #ffcc66;
-margin-top:20px;
+h1 {
+  font-size: 64px;
+  font-weight: bold;
+  text-shadow: 0 0 40px #ffcc66, 0 0 80px rgba(255, 204, 102, 0.4);
+  margin-bottom: 12px;
 }
-
-.progress{
-height:100%;
-width:0%;
-background:#ffcc66;
-animation:load 3s forwards;
+p.subtitle {
+  font-size: 18px;
+  opacity: 0.85;
+  margin-bottom: 50px;
+  letter-spacing: 2px;
 }
-
-@keyframes load{
-to{width:100%;}
+.groups {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-
-/* ===== 首屏 ===== */
-#hero{
-position:absolute;
-width:100%;
-height:100%;
-display:none;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-color:#ffd27a;
-z-index:10;
-text-align:center;
+.group-btn {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 204, 102, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffd27a;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  text-decoration: none;
 }
-
-.title{
-font-size:60px;
-font-weight:bold;
-text-shadow:0 0 30px #ffcc66;
+.group-btn:hover {
+  transform: scale(1.08);
+  border-color: #ffcc66;
+  box-shadow: 0 0 30px rgba(255, 204, 102, 0.5);
+  background: rgba(255, 204, 102, 0.1);
 }
-
-.subtitle{
-margin-top:10px;
-opacity:0.8;
+.group-btn span.count {
+  font-size: 13px;
+  margin-top: 8px;
+  opacity: 0.7;
+  font-weight: normal;
 }
-
-/* ===== UI按钮 ===== */
-.btns{
-margin-top:30px;
+.footer {
+  position: absolute;
+  bottom: 30px;
+  font-size: 13px;
+  opacity: 0.5;
 }
-
-button{
-padding:12px 26px;
-margin:6px;
-background:#ffd27a;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-transition:0.2s;
-}
-
-button:hover{
-transform:scale(1.05);
-}
-
-/* ===== 面板 ===== */
-#panel{
-position:absolute;
-bottom:40px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(0,0,0,0.6);
-border:1px solid rgba(255,215,120,0.3);
-padding:15px 20px;
-border-radius:10px;
-color:#ffd27a;
-display:none;
-z-index:15;
-}
-
-/* ===== 入盟弹窗 ===== */
-#join{
-position:absolute;
-width:100%;
-height:100%;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,0.8);
-z-index:40;
-}
-
-.card{
-width:380px;
-padding:20px;
-background:#111;
-border:1px solid #ffcc66;
-border-radius:10px;
-text-align:center;
-color:#ffd27a;
-}
-
 </style>
 </head>
-
 <body>
+<canvas id="bg"></canvas>
 
-<!-- Loading -->
-<div id="loading">
-<div>正在加载涂山世界官网...</div>
-<div class="bar"><div class="progress"></div></div>
+<div class="container">
+  <h1>涂山星图</h1>
+  <p class="subtitle">点亮九尾天狐，汇聚涂山之力</p>
+
+  <div class="groups">
+    <a class="group-btn" href="./tushan-star.html?group=1">
+      涂山一团
+      <span class="count" id="count1">0 人已点亮</span>
+    </a>
+    <a class="group-btn" href="./tushan-star.html?group=2">
+      涂山二团
+      <span class="count" id="count2">0 人已点亮</span>
+    </a>
+    <a class="group-btn" href="./tushan-star.html?group=3">
+      涂山三团
+      <span class="count" id="count3">0 人已点亮</span>
+    </a>
+  </div>
+
+  <div class="footer">GitHub Pages 纯前端部署 · 数据保存在本地浏览器</div>
 </div>
-
-<!-- Hero -->
-<div id="hero">
-<div class="title">涂山世界</div>
-<div class="subtitle">天下英雄共逐鹿 · 万军同盟争霸天下</div>
-
-<div class="btns">
-<button onclick="startGame()">进入游戏</button>
-<button onclick="showServers()">服务器</button>
-<button onclick="showJoin()">加入同盟</button>
-</div>
-</div>
-
-<!-- 底部信息 -->
-<div id="panel">S1 天下初开 · 在线 12893 · 推荐服务器</div>
-
-<!-- 入盟 -->
-<div id="join">
-<div class="card">
-<h2>同盟招募纳新</h2>
-<p>游戏内搜索：涂山丨莲花,</p >
-<p>或添加：XY-TT-QY</p >
-<p>活跃玩家优先 · 统一作战</p >
-<button onclick="closeJoin()">关闭</button>
-</div>
-</div>
-
-<!-- BGM -->
-<audio id="bgm" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2b2a1c1b5e.mp3">
-</audio>
-
-<audio id="click">
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7a8d3b5c9d.mp3">
-</audio>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
-// ===== loading =====
-setTimeout(()=>{
-document.getElementById('loading').style.display='none';
-document.getElementById('hero').style.display='flex';
-document.getElementById('panel').style.display='block';
-document.getElementById('bgm').play();
-},3000);
+// 读取各团已点亮人数
+function updateCounts() {
+  for (let i = 1; i <= 3; i++) {
+    const key = 'tushan_group_' + i;
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    document.getElementById('count' + i).textContent = list.length + ' 人已点亮';
+  }
+}
+updateCounts();
 
-// sound
-function clickSound(){
-document.getElementById('click').play();
+// 星空背景
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let width, height, stars = [];
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+for (let i = 0; i < 200; i++) {
+  stars.push({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    r: Math.random() * 1.5 + 0.3,
+    a: Math.random(),
+    speed: Math.random() * 0.02 + 0.005
+  });
 }
 
-// ===== UI =====
-function startGame(){
-clickSound();
-alert("进入游戏中（涂山大舞台,有兵你就来）");
+function drawBg() {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, width, height);
+  stars.forEach(s => {
+    s.a += s.speed;
+    const alpha = 0.3 + Math.abs(Math.sin(s.a)) * 0.7;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 215, 120, ${alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawBg);
 }
-
-function showServers(){
-clickSound();
-document.getElementById('panel').innerText =
-"S1 天下初开（推荐） · S2 烽火连天 · S3 群雄争霸";
-}
-
-function showJoin(){
-clickSound();
-document.getElementById('join').style.display='flex';
-}
-
-function closeJoin(){
-document.getElementById('join').style.display='none';
-}
-
-// ===== three.js 战场 =====
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
-camera.position.z=60;
-
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-document.body.appendChild(renderer.domElement);
-
-// 粒子战场
-const count=12000;
-const pos=new Float32Array(count*3);
-
-for(let i=0;i<count;i++){
-pos[i*3]=(Math.random()-0.5)*300;
-pos[i*3+1]=(Math.random()-0.5)*300;
-pos[i*3+2]=(Math.random()-0.5)*300;
-}
-
-const geo=new THREE.BufferGeometry();
-geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-
-const mat=new THREE.PointsMaterial({
-color:0xffcc66,
-size:0.6
-});
-
-const pts=new THREE.Points(geo,mat);
-scene.add(pts);
-
-// 动画
-function animate(){
-requestAnimationFrame(animate);
-pts.rotation.y+=0.0005;
-renderer.render(scene,camera);
-}
-animate();
-
-// resize
-window.addEventListener('resize',()=>{
-camera.aspect=innerWidth/innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(innerWidth,innerHeight);
-});
+drawBg();
 </script>
-
 </body>
 </html>
