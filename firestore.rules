@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 点亮数据：任何人可读写，但单条文档大小受限
+    match /lights/{lightId} {
+      allow read: if true;
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 12
+                    && request.resource.data.group is string
+                    && request.resource.data.ringIndex is int
+                    && request.resource.data.pointIndex is int;
+      allow update, delete: if false;
+    }
+
+    // 留言数据：任何人可读写
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 12
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() > 0
+                    && request.resource.data.text.size() <= 140
+                    && request.resource.data.group is string;
+      allow update, delete: if false;
+    }
+
+    // 在线状态：任何人可读写自己的心跳文档
+    match /presence/{docId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.lastSeen is timestamp;
+      allow delete: if true;
+    }
+
+    // 统计计数器
+    match /stats/{docId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasOnly(['totalVisits','totalLights','totalMessages','lastUpdated']);
+    }
+
+    // 排行榜用户数据
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.name is string
+                            && request.resource.data.name.size() > 0
+                            && request.resource.data.name.size() <= 12;
+    }
+  }
+}
