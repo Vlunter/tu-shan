@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>涂山星图 · 九尾天狐</title>
+<title>涂山备忘录 · 入口</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
@@ -24,14 +24,14 @@ html, body {
   display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 .title-wrap {
-  text-align: center; margin-bottom: 90px;
-  animation: fadeInDown 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  text-align: center; margin-bottom: 70px;
+  animation: fadeInDown 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 .title {
-  font-size: 92px; font-weight: 900; letter-spacing: 18px;
+  font-size: 96px; font-weight: 900; letter-spacing: 18px;
   background: linear-gradient(180deg, #ffffff 0%, #fff6d0 25%, #ffcc66 55%, #ff8c42 85%, #ff5fa2 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  filter: drop-shadow(0 0 40px rgba(255, 180, 90, 0.7)) drop-shadow(0 0 80px rgba(255, 90, 160, 0.35));
+  filter: drop-shadow(0 0 45px rgba(255, 180, 90, 0.75)) drop-shadow(0 0 90px rgba(255, 90, 160, 0.35));
   position: relative;
 }
 .title::after {
@@ -52,60 +52,54 @@ html, body {
   color: rgba(220, 240, 255, 0.9);
   text-shadow: 0 0 24px rgba(120, 190, 255, 0.55), 0 0 48px rgba(200, 160, 255, 0.25);
 }
-.groups {
-  display: flex; gap: 110px; pointer-events: auto;
-  animation: fadeInUp 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.planet {
-  width: 200px; height: 200px; border-radius: 50%;
+.enter-btn {
+  pointer-events: auto;
+  width: 260px; height: 260px; border-radius: 50%;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  text-decoration: none; color: #fff8e8; font-size: 27px; font-weight: 800; letter-spacing: 5px;
-  position: relative; transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  text-decoration: none; color: #fff8e8; font-size: 34px; font-weight: 900; letter-spacing: 6px;
+  position: relative; transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   animation: float 6s ease-in-out infinite;
   background:
-    radial-gradient(circle at 30% 25%, rgba(255, 248, 220, 0.22), rgba(255, 200, 110, 0.1) 45%, transparent 70%),
-    radial-gradient(circle at 70% 75%, rgba(160, 200, 255, 0.12), transparent 55%);
-  border: 1.5px solid rgba(255, 215, 140, 0.45);
+    radial-gradient(circle at 30% 25%, rgba(255, 248, 220, 0.25), rgba(255, 200, 110, 0.12) 45%, transparent 70%),
+    radial-gradient(circle at 70% 75%, rgba(160, 200, 255, 0.15), transparent 55%);
+  border: 2px solid rgba(255, 215, 140, 0.55);
   box-shadow:
-    0 0 60px rgba(255, 170, 80, 0.35),
-    inset 0 0 60px rgba(255, 230, 160, 0.12),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
+    0 0 80px rgba(255, 170, 80, 0.45),
+    inset 0 0 80px rgba(255, 230, 160, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
   overflow: hidden;
 }
-.planet::before {
-  content: ''; position: absolute; inset: -30px; border-radius: 50%;
-  border: 1.5px solid rgba(255, 200, 120, 0.25);
-  box-shadow: 0 0 70px rgba(255, 180, 90, 0.2);
+.enter-btn::before {
+  content: ''; position: absolute; inset: -35px; border-radius: 50%;
+  border: 2px solid rgba(255, 200, 120, 0.3);
+  box-shadow: 0 0 90px rgba(255, 180, 90, 0.25);
   animation: pulse 4s ease-in-out infinite;
 }
-.planet::after {
-  content: ''; position: absolute; inset: -55px; border-radius: 50%;
-  border: 1px solid rgba(120, 200, 255, 0.15);
+.enter-btn::after {
+  content: ''; position: absolute; inset: -60px; border-radius: 50%;
+  border: 1px solid rgba(120, 200, 255, 0.18);
   animation: pulse 6s ease-in-out infinite reverse;
 }
-.planet:nth-child(1) { animation-delay: 0s; --glow: rgba(255, 180, 80, 0.55); }
-.planet:nth-child(2) { animation-delay: -2s; --glow: rgba(160, 200, 255, 0.55); }
-.planet:nth-child(3) { animation-delay: -4s; --glow: rgba(255, 130, 190, 0.55); }
-.planet:hover {
-  transform: scale(1.18) translateY(-8px);
-  border-color: rgba(255, 240, 180, 0.85);
+.enter-btn:hover {
+  transform: scale(1.12) translateY(-10px);
+  border-color: rgba(255, 240, 180, 0.9);
   box-shadow:
-    0 0 110px var(--glow),
-    inset 0 0 90px rgba(255, 240, 180, 0.22),
-    0 0 0 2px rgba(255, 255, 255, 0.12);
+    0 0 140px rgba(255, 190, 100, 0.65),
+    inset 0 0 110px rgba(255, 240, 180, 0.28),
+    0 0 0 2px rgba(255, 255, 255, 0.15);
 }
-.planet .energy-ring {
-  position: absolute; inset: -12px; border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent, rgba(255, 220, 150, 0.4), transparent, rgba(160, 210, 255, 0.35), transparent);
+.enter-btn .energy-ring {
+  position: absolute; inset: -16px; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 220, 150, 0.45), transparent, rgba(160, 210, 255, 0.4), transparent);
   animation: spin 8s linear infinite;
-  opacity: 0.4;
+  opacity: 0.45;
 }
-.planet span.count {
-  font-size: 14px; margin-top: 10px; opacity: 0.8; font-weight: 500; letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 220, 160, 0.5);
+.enter-btn span { position: relative; z-index: 2; }
+.enter-btn .memo-icon {
+  font-size: 52px; margin-bottom: 12px;
+  filter: drop-shadow(0 0 12px rgba(255, 200, 120, 0.7));
 }
-.planet-name { position: relative; z-index: 2; }
 .footer {
   position: fixed; bottom: 24px; width: 100%; text-align: center;
   font-size: 12px; opacity: 0.45; z-index: 10; letter-spacing: 2px;
@@ -113,10 +107,6 @@ html, body {
 }
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-70px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(70px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes float {
@@ -139,30 +129,18 @@ html, body {
 
 <div class="ui">
   <div class="title-wrap">
-    <h1 class="title" data-text="涂山星图">涂山星图</h1>
-    <p class="subtitle">点亮九尾天狐 · 汇聚涂山之力</p>
+    <h1 class="title" data-text="涂山">涂山</h1>
+    <p class="subtitle">备忘录 · 星河为证</p>
   </div>
 
-  <div class="groups">
-    <a class="planet" href="./tushan-star.html?group=1">
-      <div class="energy-ring"></div>
-      <span class="planet-name">涂山一团</span>
-      <span class="count" id="count1">0 人已点亮</span>
-    </a>
-    <a class="planet" href="./tushan-star.html?group=2">
-      <div class="energy-ring"></div>
-      <span class="planet-name">涂山二团</span>
-      <span class="count" id="count2">0 人已点亮</span>
-    </a>
-    <a class="planet" href="./tushan-star.html?group=3">
-      <div class="energy-ring"></div>
-      <span class="planet-name">涂山三团</span>
-      <span class="count" id="count3">0 人已点亮</span>
-    </a>
-  </div>
+  <a class="enter-btn" href="./tushan-star.html">
+    <div class="energy-ring"></div>
+    <span class="memo-icon">✦</span>
+    <span>涂山备忘录</span>
+  </a>
 </div>
 
-<div class="footer">GitHub Pages 纯前端部署 · 数据保存在本地浏览器</div>
+<div class="footer">少小离家老大回,乡音无改鬓毛衰</div>
 
 <script type="importmap">
 {
@@ -180,11 +158,6 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
-
-for (let i = 1; i <= 3; i++) {
-  const list = JSON.parse(localStorage.getItem('tushan_group_' + i) || '[]');
-  document.getElementById('count' + i).textContent = list.length + ' 人已点亮';
-}
 
 const container = document.getElementById('canvas-container');
 const blurCanvas = document.getElementById('motion-blur-canvas');
@@ -222,8 +195,7 @@ const chromaticAberrationShader = {
   fragmentShader: `
     uniform sampler2D tDiffuse; uniform float amount; uniform vec2 center; varying vec2 vUv;
     void main(){
-      vec2 dir = vUv - center;
-      float dist = length(dir);
+      vec2 dir = vUv - center; float dist = length(dir);
       vec2 off = dir * amount * dist * (1.0 + dist * 1.5);
       float r = texture2D(tDiffuse, vUv + off).r;
       float g = texture2D(tDiffuse, vUv + off * 0.5).g;
@@ -246,8 +218,7 @@ const vignetteShader = {
   fragmentShader: `
     uniform sampler2D tDiffuse; uniform float intensity; varying vec2 vUv;
     void main(){
-      vec4 c = texture2D(tDiffuse, vUv);
-      vec2 uv = vUv * 2.0 - 1.0;
+      vec4 c = texture2D(tDiffuse, vUv); vec2 uv = vUv * 2.0 - 1.0;
       float v = 1.0 - dot(uv, uv) * 0.28 * intensity;
       gl_FragColor = vec4(c.rgb * smoothstep(0.15, 1.0, v), 1.0);
     }
@@ -532,7 +503,7 @@ function spawnMeteor() {
   });
   const meteor = new THREE.Points(geo, mat);
   meteor.position.set((Math.random() - 0.5) * 1200, 350 + Math.random() * 250, (Math.random() - 0.5) * 500);
-  meteor.userData = { vx: -10 - Math.random() * 10, vy: -5 - Math.random() * 6, vz: -4 - Math.random() * 4, life: 1 };
+  meteor.userData = { vx: -10 - Math.random() * 10, vy: -5 - Math.random() * 6, vz: -3 - Math.random() * 3, life: 1 };
   scene.add(meteor);
   meteors.push(meteor);
 }
@@ -542,35 +513,6 @@ document.addEventListener('mousemove', e => {
   mouseX = (e.clientX / window.innerWidth) * 2 - 1;
   mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
 });
-
-document.addEventListener('click', e => {
-  spawnRipple(e.clientX, e.clientY);
-});
-
-const ripples = [];
-function spawnRipple(screenX, screenY) {
-  const ndc = new THREE.Vector2((screenX / window.innerWidth) * 2 - 1, -(screenY / window.innerHeight) * 2 + 1);
-  const ray = new THREE.Raycaster();
-  ray.setFromCamera(ndc, camera);
-  const dir = ray.ray.direction.clone().normalize();
-  const origin = camera.position.clone();
-  const ringGeo = new THREE.RingGeometry(2, 4, 64);
-  const ringMat = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0xffcc88) } },
-    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-    fragmentShader: `
-      uniform float uTime; uniform vec3 uColor; varying vec2 vUv;
-      void main(){ float r=length(vUv-0.5)*2.0; float a=smoothstep(1.0,0.0,r) * smoothstep(0.0,0.3,abs(r-uTime)); gl_FragColor=vec4(uColor,a*0.8); }
-    `,
-    transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
-  });
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.position.copy(origin).add(dir.multiplyScalar(300));
-  ring.lookAt(camera.position);
-  ring.userData = { birth: performance.now(), life: 1.2 };
-  scene.add(ring);
-  ripples.push(ring);
-}
 
 let time = 0;
 let lastFrameTime = performance.now();
@@ -620,16 +562,6 @@ function animate() {
     m.userData.life -= dt * 0.8;
     m.material.opacity = Math.max(0, m.userData.life);
     if (m.userData.life <= 0) { scene.remove(m); meteors.splice(i, 1); }
-  }
-
-  for (let i = ripples.length - 1; i >= 0; i--) {
-    const r = ripples[i];
-    const age = (now - r.userData.birth) / 1000;
-    const t = age / r.userData.life;
-    r.scale.setScalar(1 + t * 25);
-    r.material.uniforms.uTime.value = t;
-    r.material.opacity = 1 - t;
-    if (t >= 1) { scene.remove(r); ripples.splice(i, 1); }
   }
 
   composer.render();
